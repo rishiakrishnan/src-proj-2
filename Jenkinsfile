@@ -4,6 +4,7 @@ pipeline {
         IMAGE_NAME = "rishiakrishnan/trend-app"
         IMAGE_TAG = "${BUILD_NUMBER}"
         DOCKER_CREDS = credentials('docker')
+        PATH = "/usr/local/bin:/usr/bin:/bin"
     }
     stages {
         stage('Build Docker Image') {
