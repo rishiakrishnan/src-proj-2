@@ -44,7 +44,7 @@ pipeline {
         }
 
         failure {
-            echo "Pipeline Faileds"
+            echo "Pipeline Failed"
         }
     }
 }
