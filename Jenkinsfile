@@ -27,6 +27,18 @@ pipeline {
                 '''
             }
         }
+        stage('Debug Environment') {
+            steps {
+                sh '''
+                echo "USER:"
+                whoami
+                echo "PATH:"
+                echo $PATH
+                echo "Kubectl Location:"
+                which kubectl || true
+                '''
+            }
+        }
         stage('Update Kubernetes Deployment') {
             steps {
                 sh '''
