@@ -35,8 +35,10 @@ pipeline {
         stage('Update Kubernetes Deployment') {
             steps {
                 sh '''
-                kubectl set image deployment/my-deployment \
-                my-container=$IMAGE_NAME:$IMAGE_TAG
+                kubectl apply -f deployment.yaml
+                kubectl apply -f service.yaml
+
+                kubectl rollout status deployment/my-deployment
                 '''
             }
         }
