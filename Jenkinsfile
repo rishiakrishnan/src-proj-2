@@ -6,11 +6,6 @@ pipeline {
         DOCKER_CREDS = credentials('docker')
     }
     stages {
-        stage('Clone Source Code') {
-            steps {
-                git 'https://github.com/rishiakrishnan/src-proj-2.git'
-            }
-        }
         stage('Build Docker Image') {
             steps {
                 sh '''
