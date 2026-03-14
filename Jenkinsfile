@@ -46,7 +46,6 @@ pipeline {
                 aws eks --region us-east-1 update-kubeconfig --name my-eks-test
                 kubectl apply -f deployment.yaml
                 kubectl apply -f service.yaml
-
                 kubectl rollout status deployment/my-deployment
                 '''
             }
