@@ -43,6 +43,7 @@ pipeline {
         stage('Update Kubernetes Deployment') {
             steps {
                 sh '''
+                aws eks --region us-east-1 update-kubeconfig --name my-eks-test
                 kubectl apply -f deployment.yaml
                 kubectl apply -f service.yaml
 
