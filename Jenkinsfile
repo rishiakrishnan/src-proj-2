@@ -61,11 +61,12 @@ pipeline {
                     --create-namespace \
                     --set alertmanager.enabled=false \
                     --set pushgateway.enabled=false \
+                    --set server.persistentVolume.enabled=true \
                     --set kubeStateMetrics.enabled=false
                     kubectl get pods -n monitoring
 
                     helm repo add grafana https://grafana.github.io/helm-charts
-                    
+
                     helm upgrade --install grafana grafana/grafana -n monitoring
                     
                 '''
