@@ -58,7 +58,10 @@ pipeline {
                     helm repo update
                     helm install prometheus prometheus-community/prometheus \
                     --namespace monitoring \
-                    --create-namespace
+                    --create-namespace \
+                    --set alertmanager.enabled=false \
+                    --set pushgateway.enabled=false \
+                    --set kubeStateMetrics.enabled=false
                     kubectl get pods -n monitoring
 
                     helm repo add grafana https://grafana.github.io/helm-charts
