@@ -51,26 +51,27 @@ pipeline {
                 '''
             }
         }
-    }
-    stage('Setup Monitoring') {
-    steps {
-        sh '''
-        if ! helm list -n monitoring | grep kube-prometheus-stack; then
-            echo "Installing monitoring stack..."
+        stage('Setup Monitoring') {
+            steps {
+                sh '''
+                if ! helm list -n monitoring | grep kube-prometheus-stack; then
+                    echo "Installing monitoring stack..."
 
-            helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
-            helm repo update
+                    helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+                    helm repo update
 
-            kubectl create namespace monitoring || true
+                    kubectl create namespace monitoring || true
 
-            helm install monitoring prometheus-community/kube-prometheus-stack \
-            --namespace monitoring
-        else
-            echo "Monitoring already installed"
-        fi
-        '''
+                    helm install monitoring prometheus-community/kube-prometheus-stack \
+                    --namespace monitoring
+                else
+                    echo "Monitoring already installed"
+                fi
+                '''
+                }
         }
-    }  
+    }
+    
     post {
         success {
             echo "Deployment Successfull"
