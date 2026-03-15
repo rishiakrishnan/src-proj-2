@@ -32,6 +32,7 @@ pipeline {
             steps {
                 sh '''
                 echo "USER:"
+                echo "USER:"
                 whoami
                 echo "PATH:"
                 echo $PATH
