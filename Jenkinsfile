@@ -54,19 +54,20 @@ pipeline {
         stage('Setup Monitoring') {
             steps {
                 sh '''
-                if ! helm list -n monitoring | grep kube-prometheus-stack; then
-                    echo "Installing monitoring stack..."
-
+                    helm uninstall monitoring -n monitoring
+                    kubectl delete namespace monitoring
                     helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
                     helm repo update
+                    helm install prometheus prometheus-community/prometheus \
+                    --namespace monitoring \
+                    --create-namespace
+                    kubectl get pods -n monitoring
 
-                    kubectl create namespace monitoring || true
+                    helm repo add grafana https://grafana.github.io/helm-charts
+                    helm repo update
 
-                    helm install monitoring prometheus-community/kube-prometheus-stack \
-                    --namespace monitoring
-                else
-                    echo "Monitoring already installed"
-                fi
+                    helm install grafana grafana/grafana -n monitoring
+                    
                 '''
                 }
         }
