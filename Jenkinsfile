@@ -64,10 +64,16 @@ pipeline {
                     --set server.persistentVolume.enabled=true \
                     --set kubeStateMetrics.enabled=false
                     kubectl get pods -n monitoring
+                    helm upgrade prometheus prometheus-community/prometheus \
+                    -n monitoring \
+                    --set server.persistentVolume.enabled=false                    
 
                     helm repo add grafana https://grafana.github.io/helm-charts
 
                     helm upgrade --install grafana grafana/grafana -n monitoring
+
+                    nohup kubectl port-forward svc/prometheus-server -n monitoring 9090:80 > prometheus.log 2>&1 &
+                    nohup kubectl port-forward svc/grafana -n monitoring 3000:80 > grafana.log 2>&1 &
                     
                 '''
                 }
