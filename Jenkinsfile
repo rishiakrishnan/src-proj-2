@@ -36,6 +36,7 @@ pipeline {
                 which kubectl || true
                 '''
             }
+        }
         stage('Deployment') {
             steps {
                 sh '''
@@ -45,33 +46,6 @@ pipeline {
                 kubectl rollout status deployment/my-deployment
                 '''
             }
-        }
-        stage('Setup Monitoring') {
-            steps {
-                sh '''
-                    helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
-                    helm repo update
-                    helm upgrade --install prometheus prometheus-community/prometheus \
-                    --namespace monitoring \
-                    --create-namespace \
-                    --set alertmanager.enabled=false \
-                    --set pushgateway.enabled=false \
-                    --set server.persistentVolume.enabled=true \
-                    --set kubeStateMetrics.enabled=false
-                    kubectl get pods -n monitoring
-                    helm upgrade prometheus prometheus-community/prometheus \
-                    -n monitoring \
-                    --set server.persistentVolume.enabled=false                    
-
-                    helm repo add grafana https://grafana.github.io/helm-charts
-
-                    helm upgrade --install grafana grafana/grafana -n monitoring
-
-                    nohup kubectl port-forward svc/prometheus-server -n monitoring 9090:80 > prometheus.log 2>&1 &
-                    nohup kubectl port-forward svc/grafana -n monitoring 3000:80 > grafana.log 2>&1 &
-                    
-                '''
-                }
         }
     }
     
