@@ -7,28 +7,24 @@ pipeline {
         PATH = "/usr/local/bin:/usr/bin:/bin"
     }
     stages {
-        stage('Build Docker Image') {
+        stage('BUILD') {
             steps {
                 sh '''
                 docker build -t $IMAGE_NAME:$IMAGE_TAG .
                 '''
             }
         }
-        stage('Login to DockerHub') {
             steps {
                 sh '''
                 echo $DOCKER_CREDS_PSW | docker login -u $DOCKER_CREDS_USR --password-stdin
                 '''
             }
-        }
-        stage('Push Image to DockerHub') {
+        stage('PUSH') {
             steps {
                 sh '''
                 docker push $IMAGE_NAME:$IMAGE_TAG
                 '''
             }
-        }
-        stage('Debug Environment') {
             steps {
                 sh '''
                 echo "USER:"
@@ -40,8 +36,7 @@ pipeline {
                 which kubectl || true
                 '''
             }
-        }
-        stage('Update Kubernetes Deployment') {
+        stage('Deployment') {
             steps {
                 sh '''
                 aws eks update-kubeconfig --region us-east-1 --name my-eks-test
