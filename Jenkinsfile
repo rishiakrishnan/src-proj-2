@@ -13,21 +13,17 @@ pipeline {
                 docker build -t $IMAGE_NAME:$IMAGE_TAG .
                 '''
             }
-        }
             steps {
                 sh '''
                 echo $DOCKER_CREDS_PSW | docker login -u $DOCKER_CREDS_USR --password-stdin
                 '''
             }
+        }
+
         stage('PUSH') {
             steps {
                 sh '''
                 docker push $IMAGE_NAME:$IMAGE_TAG
-                '''
-            }
-            steps {
-                sh '''
-                echo "USER:"
                 echo "USER:"
                 whoami
                 echo "PATH:"
@@ -37,6 +33,7 @@ pipeline {
                 '''
             }
         }
+
         stage('Deployment') {
             steps {
                 sh '''
@@ -51,7 +48,7 @@ pipeline {
     
     post {
         success {
-            echo "Deployment Successfull"
+            echo "Deployment Successful"
         }
 
         failure {
