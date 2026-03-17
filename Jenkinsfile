@@ -12,8 +12,7 @@ pipeline {
                 sh '''
                 docker build -t $IMAGE_NAME:$IMAGE_TAG .
                 '''
-            }
-            steps {
+                
                 sh '''
                 echo $DOCKER_CREDS_PSW | docker login -u $DOCKER_CREDS_USR --password-stdin
                 '''
